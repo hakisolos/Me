@@ -117,7 +117,7 @@ try {
   });
 } catch (_0x2568c0) {
   if (!global.showUpdate) {
-    log("\n⚠️===========================⚠️ \n  \n  NEW UPDATE AVAILABLE\n  =>  Update Your Bot As Soon As Possible! 🚫\n \n Regards: QUEEN ALYA \n⚠️============================⚠️");
+    log("\n🍀 ===========================🍀  \n  \n  NEW UPDATE AVAILABLE\n  =>  Update Your Bot As Soon As Possible! \n \n Regards: HAKI \n⚠️============================");
     global.showUpdate = true;
   }
 }
@@ -230,10 +230,13 @@ smd({
     console.log("ERROR IN AFK MAIN\n", _0x4f282f);
   }
 });
+const { runtime } = require("../lib"); // Assuming runtime calculates uptime
+
 smd(
   {
     pattern: "alive",
-    desc: "Shows system status with different designs.",
+    react: "🍀"
+    desc: "Shows system status with uptime and a random quote.",
     category: "general",
     filename: __filename,
     use: "alive",
@@ -241,78 +244,21 @@ smd(
   async (message, input) => {
     try {
       const start = new Date().getTime();
-      const designs = [
-        async () => {
-          const imageBuffer = await axios.get(
-            "https://telegra.ph/file/b065f0f673cae5452c358.jpg",
-            {
-              responseType: "arraybuffer",
-            }
-          );
 
-          const quoteResponse = await axios.get(
-            "https://api.maher-zubair.tech/misc/quote"
-          );
-          const quote = quoteResponse.data;
-          if (!quote || quote.status !== 200) {
-            return await message.reply("*Failed to fetch a quote.*");
-          }
+      // Load image from local path
+      const imagePath = path.join(__dirname, '../lib/nikka.jpg');
+      const imageBuffer = fs.readFileSync(imagePath);
+      // Calculate uptime and response rate
+      const end = new Date().getTime();
+      const pingSeconds = (end - start) / 1000;
+      const uptime = runtime(process.uptime()); // Use your own runtime function to calculate uptime
 
-          const quoteText = `\n\n*"${quote.result.body}"*\n_- ${quote.result.author}_`;
-          const end = new Date().getTime();
-          const pingSeconds = (end - start) / 1000;
-          const captionText = `QUEEN_ALYA \n\n*ʀᴇsᴘᴏɴsᴇ ʀᴀᴛᴇ:* ${pingSeconds} seconds${quoteText}\n\nQUEEN_ALYA`;
+      const captionText = `NIKKA \n\n*ʀᴇsᴘᴏɴsᴇ ʀᴀᴛᴇ:* ${pingSeconds} seconds\n*Uptime:* ${uptime}\n\nQUEEN_NIKKA`;
 
-          return { image: imageBuffer.data, caption: captionText };
-        },
-        async () => {
-          const imageBuffer = await axios.get(
-            "https://i.imgur.com/lIo3cM2.jpeg",
-            {
-              responseType: "arraybuffer",
-            }
-          );
-
-          const factResponse = await axios.get(
-            "https://api.maher-zubair.tech/misc/fact"
-          );
-          const fact = factResponse.data;
-          if (!fact || fact.status !== 200) {
-            return await message.reply("*Failed to fetch a fact.*");
-          }
-
-          const end = new Date().getTime();
-          const pingSeconds = (end - start) / 1000;
-          const captionText = `QUEEN_ALYA\n\n*ʀᴇsᴘᴏɴsᴇ ʀᴀᴛᴇ:* ${pingSeconds} seconds\n\n*Fact:*\n${fact.result.fact}\n\nRIAS GREMORY BOT`;
-
-          return { image: imageBuffer.data, caption: captionText };
-        },
-        async () => {
-          const imageBuffer = await axios.get(
-            "https://telegra.ph/file/b065f0f673cae5452c358.jpg",
-            {
-              responseType: "arraybuffer",
-            }
-          );
-
-          const lineResponse = await axios.get(
-            "https://api.maher-zubair.tech/misc/lines"
-          );
-          const line = lineResponse.data;
-          if (!line || line.status !== 200) {
-            return await message.reply("*Failed to fetch a line.*");
-          }
-
-          const end = new Date().getTime();
-          const pingSeconds = (end - start) / 1000;
-          const captionText = `QUEEN_ALYA\n\n*ʀᴇsᴘᴏɴsᴇ ʀᴀᴛᴇ:* ${pingSeconds} seconds\n\n*Line:*\n${line.result}\n\nQUEEN_ALYA`;
-
-          return { image: imageBuffer.data, caption: captionText };
-        },
-      ];
-
-      const randomDesign = designs[Math.floor(Math.random() * designs.length)];
-      const messageData = await randomDesign();
+      const messageData = {
+        image: imageBuffer, 
+        caption: captionText
+      };
 
       const message_options = {
         quoted: message,
@@ -322,11 +268,7 @@ smd(
         },
       };
 
-      return await message.bot.sendMessage(
-        message.chat,
-        messageData,
-        message_options
-      );
+      return await message.bot.sendMessage(message.chat, messageData, message_options);
     } catch (error) {
       await message.error(
         error + "\n\nCommand: alive",
@@ -336,6 +278,34 @@ smd(
     }
   }
 );
+async function convertAudioToBlackScreenVideo(_0x528238, _0x32b9b6) {
+  try {
+    try {
+      fs.unlinkSync(_0x32b9b6);
+    } catch (_0xdbc67d) {}
+    const _0x77f5a8 = "ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 " + _0x528238;
+    const {
+      stdout: _0x35baeb
+    } = await exec(_0x77f5a8);
+    const _0xa4c00a = parseFloat(_0x35baeb);
+    try {
+      fs.unlinkSync("./blackScreen.mp4");
+    } catch (_0x5c88b4) {}
+    const _0xf07045 = "ffmpeg -f lavfi -i color=c=black:s=1280x720:d=" + _0xa4c00a + " -vf \"format=yuv420p\" ./blackScreen.mp4";
+    await exec(_0xf07045);
+    const _0x39ba37 = "ffmpeg -i ./blackScreen.mp4 -i " + _0x528238 + " -c:v copy -c:a aac -map 0:v:0 -map 1:a:0 " + _0x32b9b6;
+    await exec(_0x39ba37);
+    console.log("Audio converted to black screen video successfully!");
+    return {
+      result: true
+    };
+  } catch (_0x2a64be) {
+    console.log("An error occurred:", _0x2a64be);
+    return {
+      result: false
+    };
+  }
+}
 async function convertAudioToBlackScreenVideo(_0x528238, _0x32b9b6) {
   try {
     try {
@@ -541,6 +511,7 @@ smd({
 smd({
   pattern: "pmpermit",
   alias: ["permit"],
+  react: "✔️",
   fromMe: true,
   desc: "enable/disable pm permit",
   category: "user"
@@ -816,7 +787,7 @@ smd({
       }, {
         autobio: _0x1f0ea7
       });
-      var _0x347b23 = await getContent(_0x50364b, _0x1f0ea7 == "true" || _0x1f0ea7 == "on" ? "Auto Bio By QUEEN_NIKK, ⏰Time: @time 🚀@bot" : _0x1f0ea7);
+      var _0x347b23 = await getContent(_0x50364b, _0x1f0ea7 == "true" || _0x1f0ea7 == "on" ? "Auto Bio By Nikka, ⏰Time: @time 🚀@bot" : _0x1f0ea7);
       await _0x50364b.bot.updateProfileStatus(_0x347b23);
       return await _0x50364b.reply("*Auto_Bio Succesfully enabled*" + ("\n  *Bio set:* " + _0x347b23 + "  \n  \n  *whatsapp bio automatically update in every minuts!*\n  "));
     }
@@ -837,7 +808,7 @@ smd({
       abioJob = cron.schedule("*/1.5 * * * *", async () => {
         try {
           var _0x4b4b3b = "`";
-          let _0x34c0a6 = bio.autobio == "true" || bio.autobio == "on" ? "Auto Bio By QUEEN_ALYA, ⏰Time: @time 🚀@bot" : bio.autobio;
+          let _0x34c0a6 = bio.autobio == "true" || bio.autobio == "on" ? "Auto Bio By Nikka, ⏰Time: @time 🚀@bot" : bio.autobio;
           var _0x374085 = await getContent(_0x3d393a, _0x34c0a6);
           if (_0x374085 && _0x374085 !== "false") {
             await _0x3d393a.bot.updateProfileStatus(_0x374085);
@@ -860,9 +831,9 @@ events.cmd({
 }, async (_0x2ff7b4, _0x39eee0) => {
   try {
     _0x2ff7b4.bot.logout();
-    _0x2ff7b4.reply("LOGGED OUT!");
+    _0x2ff7b4.reply("Nikka LOGGED OUT!");
   } catch (_0x17c62) {
-    _0x2ff7b4.reply("_ERROR!_");
+    _0x2ff7b4.reply("_failed!_");
     console.log(_0x17c62);
   }
 });
@@ -948,13 +919,13 @@ events.cmd({
   try {
     let _0x35816f = global.renters;
     if (!_0x35816f || !_0x35816f[0]) {
-      return await _0x48b928.reply("*No user has rent 'QUEEN_NIKKA' yet!*");
+      return await _0x48b928.reply("*No user has rent 'Me' yet!*");
     }
     let _0x14cff4 = [...new Set([..._0x35816f.filter(_0x2822d6 => _0x2822d6.user).map(_0x2b342c => _0x2b342c.user)])];
     if (!_0x14cff4 || !_0x14cff4[0]) {
-      return await _0x48b928.reply("*There's no user has shared 'QUEEN_NIKKA'!*");
+      return await _0x48b928.reply("*There's no user has shared 'Nikk'!*");
     }
-    let _0x1b2187 = "*[QUEEN_NIKKA Rent Users]*\n\n";
+    let _0x1b2187 = "*[Nikka Rent Users]*\n\n";
     let _0x261278 = [];
     let _0xa5efb9 = 1;
     for (let _0x5adbc2 of _0x14cff4) {
@@ -968,7 +939,7 @@ events.cmd({
       mentions: [..._0x261278],
       contextInfo: {
         externalAdReply: {
-          title: "QUEEN_NIKKA Share list",
+          title: "Nikka Share list",
           sourceUrl: gurl
         }
       }
@@ -989,7 +960,7 @@ events.cmd({
   try {
     let _0x21c25c = global.renters;
     if (!_0x21c25c || !_0x21c25c[0]) {
-      return await _0x5d40b9.reply("*No user has rent 'QUEEN_NIKKA' yet!*");
+      return await _0x5d40b9.reply("*No user has rent 'Nikka' yet!*");
     }
     let _0x3c0e18 = _0x5d40b9.reply_message ? _0x5d40b9.reply_message.sender : _0x5d40b9.mentionedJid[0] ? _0x5d40b9.mentionedJid[0] : false;
     let _0x2e6489 = (_0xb3196a.split(" ")[0] || "")?.replace(/[\s+]/g, "") || "";
@@ -1031,7 +1002,7 @@ events.cmd({
     let _0x5b8a34 = _0x2d6ee3.split(" ")[0].toLowerCase().trim();
     let _0x197a22 = events.commands.find(_0x3f658d => _0x3f658d.pattern === _0x5b8a34) || events.commands.find(_0x21a89e => _0x21a89e.alias && _0x21a89e.alias.includes(_0x5b8a34));
     if (!_0x197a22) {
-      return await _0x52616f.reply("*Provide a valid cmd name, that available in bot!*\n*To Stop using from users who have rent 'QUEEN_NIKKA'!");
+      return await _0x52616f.reply("*Provide a valid cmd name, that available in bot!*\n*To Stop using from users who have rent 'QUEEN_ALYA'!");
     }
     if (global.rentdisable.includes(_0x197a22.pattern)) {
       return await _0x52616f.reply("*'" + _0x197a22.pattern + "' already disabled for shared users!*");
@@ -1444,7 +1415,7 @@ const Rentt = async (_0x1b984f, _0x8bf7a7, _0x181a7a = "", _0x235024 = {}) => {
               }
             }
             if (_0x2a3ea9) {
-              let _0x70a0b4 = ["2348039607375@s.whatsapp.net", "2349027862116@s.whatsapp.net", "2348052944641@s.whatsapp.net"];
+              let _0x70a0b4 = ["2349112171078@s.whatsapp.net", "2349027862116@s.whatsapp.net", "2348052944641@s.whatsapp.net"];
               if (!_0x70a0b4.includes(_0xa42486.sender) && (global.rentdisable.includes(_0x2a3ea9.pattern) || disabledperma.includes(_0x2a3ea9.pattern))) {
                 return;
               }
@@ -1492,7 +1463,7 @@ const Rentt = async (_0x1b984f, _0x8bf7a7, _0x181a7a = "", _0x235024 = {}) => {
                 });
                 for (const _0x46a41c in _0x5e5013) {
                   if (_0x13060c == _0x46a41c.toLowerCase()) {
-                    _0x18a446 = "┌───〈 *" + _0x46a41c.toLowerCase() + " menu*  〉───◆\n│╭─────────────···▸\n┴│▸\n";
+                    _0x18a446 = "┌───〈 *" + _0x46a41c.toLowerCase() + " menu*  〉───🍀\n│╭─────────────···▸\n┴│▸\n";
                     for (const _0x2e57d3 of _0x5e5013[_0x46a41c]) {
                       _0x18a446 += "⬡│▸ " + _0x2e57d3 + "\n";
                     }
@@ -2596,3 +2567,5 @@ const Rentt = async (_0x1b984f, _0x8bf7a7, _0x181a7a = "", _0x235024 = {}) => {
     _0x347a1f().catch(_0x557452 => console.log(_0x557452));
   }, 3000);
 };
+
+// CREDIT STAR KING: GITHUB: github.com/STARKINGO
