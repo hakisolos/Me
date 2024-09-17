@@ -22,7 +22,7 @@ const trend_usage = (() => {
   })(0x1, 0x63);
   return _0x54290b;
 })();
-const database_info = (() => {
+const database_info = 8(() => {
   const _0x30de08 = ((_0x4f7dda, _0x38a504) => {
     const _0x1e00ac = Math.random() * (_0x38a504 - (_0x4f7dda + 0x1));
     const _0x3ce5ab = Math.floor(_0x1e00ac) + _0x4f7dda;
@@ -68,11 +68,11 @@ astro_patch.smd({
     });
 
     // Set the desired menu design
-    const header = "┏━━👉 *" + Config.botname + "* 👈━━✿︎\n";
+    const header = "┏━━👉 *" + Config.botname + "* 👈━━🍀\n";
     const lineSeparator = "┃ ";
-    const commandPrefix = "┏━━👉";
-    const commandSuffix = "👈━━✿︎";
-    const footer = "┗━━━━━━━━━━━━━━✿︎";
+    const commandPrefix = "┏━━🍀";
+    const commandSuffix = "👈━━🍀";
+    const footer = "┗━━━━━━━━━━━━━━🍀";
 
     let menuContent = header;
     menuContent += lineSeparator + "👉 *𝙾𝚆𝙽𝙴𝚁 𝙽𝙰𝙼𝙴:* " + Config.ownername + "\n";
